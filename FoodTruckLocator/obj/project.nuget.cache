@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "nCL7PTYXUyo=",
+  "dgSpecHash": "Ot9p3PNduFo=",
   "success": true,
-  "projectFilePath": "C:\\Users\\patri\\OneDrive\\Desktop\\IT 7\\IT701\\Project\\FoodTruckLocator\\FoodTruckLocator.csproj",
+  "projectFilePath": "C:\\Users\\patri\\OneDrive\\Desktop\\IT 7\\IT701\\CurbsideCuisine\\FoodTruckLocator\\FoodTruckLocator.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\patri\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\patri\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

@@ -11,7 +11,7 @@ export default function Footer() {
         <nav className="mt-4 md:mt-0 flex flex-col sm:flex-row gap-2 sm:gap-6 text-sm">
           <NavLink to="/" className="hover:underline">Home</NavLink>
           <NavLink to="/map" className="hover:underline">Map</NavLink>
-          <NavLink to="/vendor/123" className="hover:underline">Vendor</NavLink>
+          <NavLink to="/vendor/123" className="hover:underline">Foodtrucks</NavLink>
           <NavLink to="/login" className="hover:underline">Login</NavLink>
         </nav>
       </div>

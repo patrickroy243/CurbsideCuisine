@@ -42,14 +42,12 @@ namespace FoodTruckLocator.Controllers
                 UserName = dto.Email,
                 Email = dto.Email,
                 Name = dto.Name
-                // I removed the usertype
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
-            // Ensure role exists
             if (!await _roleManager.RoleExistsAsync(dto.UserType))
             {
                 var roleResult = await _roleManager.CreateAsync(new IdentityRole(dto.UserType));
@@ -57,7 +55,6 @@ namespace FoodTruckLocator.Controllers
                     return BadRequest(roleResult.Errors);
             }
 
-            // Assign role to users
             await _userManager.AddToRoleAsync(user, dto.UserType);
 
             return Ok("User registered successfully.");
@@ -88,7 +85,7 @@ namespace FoodTruckLocator.Controllers
                     Id = user.Id,
                     Name = user.Name,
                     Email = user.Email,
-                    UserType = roles.FirstOrDefault() ?? "Unknown"  // I used role instead of usertype
+                    UserType = roles.FirstOrDefault() ?? "Unknown"  
                 }
             });
         }

@@ -19,7 +19,7 @@ export default function Vendor() {
 
     if (loading) return <Loader />
     if (!vendor)
-        return <p className="text-center text-gray-600 mt-8">Vendor not found</p>
+        return <p className="text-center text-gray-600 mt-8">Foodtruck not found</p>
 
     return (
         <div className="max-w-lg mx-auto mt-8 bg-white p-6 rounded shadow">

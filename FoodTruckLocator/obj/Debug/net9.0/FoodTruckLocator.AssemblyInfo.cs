@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FoodTruckLocator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+07648d070d23734c02a8bdbd25211b21bfca385d")]
 [assembly: System.Reflection.AssemblyProductAttribute("FoodTruckLocator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FoodTruckLocator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -11,7 +11,7 @@ export default function Home() {
         <div className="overflow-x-hidden">
             <div
                 className="text-center px-6 py-46 
-                bg-[url('../Images/homedivimg.jpg')] bg-cover bg-center bg-no-repeat"
+                bg-[url('../Images/homebg.jpg')] bg-cover bg-center bg-no-repeat"
             >
                 <h1 className="text-5xl md:text-6xl font-bold text-zinc-800">
                     Welcome to Curbside Cuisine

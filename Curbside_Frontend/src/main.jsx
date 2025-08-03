@@ -23,9 +23,11 @@ root.render(
 // Curbside_Frontend
 // >src 
 //   >component
+//     >footer.jsx
 //     >loader.jsx
 //     >mapApi.jsx
 //     >navbar.jsx
+//     >searchbar.jsx
 //   >page 
 //     >home.jsx
 //     >login.jsx

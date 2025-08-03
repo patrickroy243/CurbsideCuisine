@@ -5214,11 +5214,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\patri\\OneDrive\\Desktop\\IT 7\\IT701\\Project\\FoodTruckLocator\\FoodTruckLocator.csproj",
+      "projectUniqueName": "C:\\Users\\patri\\OneDrive\\Desktop\\IT 7\\IT701\\CurbsideCuisine\\FoodTruckLocator\\FoodTruckLocator.csproj",
       "projectName": "FoodTruckLocator",
-      "projectPath": "C:\\Users\\patri\\OneDrive\\Desktop\\IT 7\\IT701\\Project\\FoodTruckLocator\\FoodTruckLocator.csproj",
+      "projectPath": "C:\\Users\\patri\\OneDrive\\Desktop\\IT 7\\IT701\\CurbsideCuisine\\FoodTruckLocator\\FoodTruckLocator.csproj",
       "packagesPath": "C:\\Users\\patri\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\patri\\OneDrive\\Desktop\\IT 7\\IT701\\Project\\FoodTruckLocator\\obj\\",
+      "outputPath": "C:\\Users\\patri\\OneDrive\\Desktop\\IT 7\\IT701\\CurbsideCuisine\\FoodTruckLocator\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\patri\\AppData\\Roaming\\NuGet\\NuGet.Config"

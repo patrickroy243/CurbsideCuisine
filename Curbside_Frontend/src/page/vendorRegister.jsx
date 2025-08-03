@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import Navbar from '../component/navbar.jsx'         
+import Navbar from '../component/navbar.jsx'
 
 const API_BASE =
   `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5034'}/api`
@@ -22,14 +22,16 @@ async function apiFetch(path, { method = 'GET', body, requireAuth = false } = {}
   return payload
 }
 
-function login({ email, password }) {
-  return apiFetch('/auth/login', {
+function registerVendor({ name, email, password }) {
+  // always register as Owner
+  return apiFetch('/auth/register', {
     method: 'POST',
-    body: { email, password }
+    body: { name, email, password, userType: 'Owner' }
   })
 }
 
-export default function Login() {
+export default function VendorRegister() {
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -39,15 +41,13 @@ export default function Login() {
     e.preventDefault()
     setError('')
     try {
-      const { token, user } = await login({ email, password })
-      localStorage.setItem('token', token)
-      localStorage.setItem('user', JSON.stringify(user))
-      alert('Login successful!')
-      navigate(user.userType === 'Owner' ? '/vendor-dashboard' : '/customer-home')
+      await registerVendor({ name, email, password })
+      alert('Vendor registration successful! Please log in.')
+      navigate('/login', { replace: true })
     } catch (ex) {
-      const msg = ex.message || 'Login failed. Please try again.'
+      const msg = ex.message || 'Registration failed. Please try again.'
       setError(msg)
-      alert(`Login failed: ${msg}`)
+      alert(`Registration failed: ${msg}`)
     }
   }
 
@@ -56,29 +56,31 @@ export default function Login() {
       className="fixed inset-0 flex flex-col overflow-hidden bg-cover bg-center"
       style={{ backgroundImage: "url('../Images/57664.jpg')" }}
     >
-            <Navbar />
+      <Navbar />
+
       <div className="flex-1 flex items-center justify-center px-8">
         <form
           onSubmit={handleSubmit}
           className="w-full max-w-md bg-white p-8 rounded shadow-lg"
         >
           <h2 className="text-2xl font-semibold text-sky-500 mb-6">
-            Login
+            Vendor Sign Up
           </h2>
 
           {error && (
             <p className="mb-4 text-sm text-red-600">{error}</p>
           )}
 
-          <p className="mb-6 text-sm">
-            Not a member yet?{' '}
-            <Link
-              to="/signup"
-              className="font-bold text-sky-500 hover:underline"
-            >
-              Create an Account
-            </Link>
-          </p>
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-1">Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              required
+              className="w-full border border-gray-300 p-2 rounded focus:border-sky-500 focus:ring focus:ring-sky-200"
+            />
+          </div>
 
           <div className="mb-4">
             <label className="block text-gray-700 mb-1">Email</label>
@@ -98,6 +100,7 @@ export default function Login() {
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
+              minLength={6}
               className="w-full border border-gray-300 p-2 rounded focus:border-sky-500 focus:ring focus:ring-sky-200"
             />
           </div>
@@ -106,20 +109,17 @@ export default function Login() {
             type="submit"
             className="w-full bg-sky-500 hover:bg-sky-600 text-white font-semibold py-2 rounded"
           >
-            Login
+            Register Vendor
           </button>
 
           <p className="mt-6 text-sm">
-            Are you a food truck owner?
-            <br />
-            Create a{' '}
+            Already have an account?{' '}
             <Link
-              to="/vendor-signup"
+              to="/login"
               className="font-bold text-sky-500 hover:underline"
             >
-              Curbside Cuisine Vendor
-            </Link>{' '}
-            account to get started.
+              Log In
+            </Link>
           </p>
         </form>
       </div>
