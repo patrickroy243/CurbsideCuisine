@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "@supabase/supabase-js": "^2.76.1",
     "@tailwindcss/vite": "^4.1.13",
     "@turf/distance": "^7.1.0",
     "lucide-react": "^0.460.0",

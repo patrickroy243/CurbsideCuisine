@@ -48,7 +48,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddDbContext<CurbsideDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddCors(options =>
 {
@@ -122,15 +122,17 @@ builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
+// Enable Swagger in all environments
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Curbside API V1");
+    c.RoutePrefix = string.Empty; 
+});
+
 if (app.Environment.IsDevelopment())
 {
     app.UseCors("DevelopmentCors");
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Curbside API V1");
-        c.RoutePrefix = string.Empty; 
-    });
 }
 else
 {
