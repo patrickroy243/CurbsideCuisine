@@ -37,7 +37,8 @@ const apiService = {
     // If it's already a full URL (starts with http), return as-is
     if (imageUrl.startsWith('http')) return imageUrl;
     // If it's a relative path from our API, prepend the base URL (without /api)
-    return `http://localhost:5194${imageUrl}`;
+    const apiBaseWithoutPath = API_BASE_URL.replace('/api', '');
+    return `${apiBaseWithoutPath}${imageUrl}`;
   },
 
   login: async (credentials) => {
