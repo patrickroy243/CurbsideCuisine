@@ -12,7 +12,6 @@ const logRequest = (method, url, data = null) => {
   }
 };
 
-// Handle 401 Unauthorized responses (token expired)
 const handleUnauthorized = (response) => {
   if (response.status === 401) {
     console.log('Token expired or unauthorized - logging out');
@@ -24,7 +23,6 @@ const handleUnauthorized = (response) => {
   return false;
 };
 
-// Wrapper for fetch that handles auth errors
 const fetchWithAuth = async (url, options = {}) => {
   const response = await fetch(url, options);
   handleUnauthorized(response);
@@ -34,9 +32,7 @@ const fetchWithAuth = async (url, options = {}) => {
 const apiService = {
   getImageUrl: (imageUrl) => {
     if (!imageUrl) return null;
-    // If it's already a full URL (starts with http), return as-is
     if (imageUrl.startsWith('http')) return imageUrl;
-    // If it's a relative path from our API, prepend the base URL (without /api)
     const apiBaseWithoutPath = API_BASE_URL.replace('/api', '');
     return `${apiBaseWithoutPath}${imageUrl}`;
   },
