@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #0ea5e9; 
+  --primary-dark: #0284c7; 
+  --primary-light: #7dd3fc;
+  --background: #ffffff;
+  --text-dark: #0f172a; 
+  --text-gray: #64748b;
+}
+
+body {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  background-color: var(--background);
+  color: var(--text-dark);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #7dd3fc;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0ea5e9;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  @apply bg-sky-400 text-white hover:bg-sky-500 focus:ring-sky-300;
+}
+
+.btn-secondary {
+  @apply bg-sky-300 text-sky-900 hover:bg-sky-400 hover:text-white focus:ring-sky-200;
+}
+
+.btn-outline {
+  @apply border-sky-400 text-sky-400 hover:bg-sky-400 hover:text-white focus:ring-sky-300;
+}
+
+.input-primary {
+  @apply border-sky-300 focus:border-sky-400 focus:ring-sky-300;
+}
+
+.card {
+  @apply bg-white border border-sky-100 shadow-sm;
+}
+
+@keyframes pulse-sky {
+  0%, 100% {
+    opacity: 1;
+    background-color: #7dd3fc;
+  }
+  50% {
+    opacity: 0.7;
+    background-color: #0ea5e9;
+  }
+}
+
+.pulse-sky {
+  animation: pulse-sky 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
