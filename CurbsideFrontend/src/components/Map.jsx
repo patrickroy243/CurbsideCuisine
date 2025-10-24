@@ -131,26 +131,88 @@ const CurbsideMap = () => {
     }
 
     setGettingLocation(true);
-    setError('Getting your precise location...');
+    setError('Getting your location...');
     
-    // Use watchPosition for better accuracy and then clear it
-    const watchId = navigator.geolocation.watchPosition(
+    let bestPosition = null;
+    let watchId = null;
+    let timeoutId = null;
+    
+    // First, try to get a quick position with getCurrentPosition
+    navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude, accuracy } = position.coords;
-        console.log(`📍 Location found: ${latitude}, ${longitude} (accuracy: ${accuracy}m)`);
+        bestPosition = position;
         
-        // Clear the watch after getting a reasonably accurate position
-        if (accuracy <= 100) {
-          navigator.geolocation.clearWatch(watchId);
+        // If accuracy is good enough (< 50m), use it immediately
+        if (accuracy <= 50) {
+          console.log(`📍 Quick location found: ${latitude}, ${longitude} (accuracy: ${accuracy}m)`);
+          setUserLocation({ latitude, longitude });
           
-          const isWellington = Math.abs(latitude - (-41.3138944)) < 0.1 && Math.abs(longitude - 174.7877888) < 0.1;
-          const isPoorAccuracy = accuracy > 1000;
+          if (map.current) {
+            map.current.flyTo({
+              center: [longitude, latitude],
+              zoom: 15,
+              duration: 2000
+            });
+          }
+          setError('');
+          setGettingLocation(false);
+          return;
+        }
+        
+        // Otherwise, start watching for better accuracy
+        console.log(`📍 Initial location: ${latitude}, ${longitude} (accuracy: ${accuracy}m) - improving...`);
+        setError(`Location found (accuracy: ${accuracy.toFixed(0)}m) - improving...`);
+        
+        watchId = navigator.geolocation.watchPosition(
+          (newPosition) => {
+            const newAccuracy = newPosition.coords.accuracy;
+            
+            // Update if this is more accurate
+            if (!bestPosition || newAccuracy < bestPosition.coords.accuracy) {
+              bestPosition = newPosition;
+              console.log(`📍 Better location: ${newPosition.coords.latitude}, ${newPosition.coords.longitude} (accuracy: ${newAccuracy}m)`);
+              setError(`Improving accuracy: ${newAccuracy.toFixed(0)}m`);
+            }
+            
+            // Stop if we reach good accuracy (< 50m)
+            if (newAccuracy <= 50) {
+              navigator.geolocation.clearWatch(watchId);
+              clearTimeout(timeoutId);
+              
+              const { latitude, longitude } = newPosition.coords;
+              setUserLocation({ latitude, longitude });
+              
+              if (map.current) {
+                map.current.flyTo({
+                  center: [longitude, latitude],
+                  zoom: 15,
+                  duration: 2000
+                });
+              }
+              setError('');
+              setGettingLocation(false);
+            }
+          },
+          (error) => {
+            console.error('Watch position error:', error);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+          }
+        );
+        
+        // Stop watching after 10 seconds and use best position available
+        timeoutId = setTimeout(() => {
+          if (watchId) {
+            navigator.geolocation.clearWatch(watchId);
+          }
           
-          if (isWellington || isPoorAccuracy) {
-            console.warn('⚠️ Location seems inaccurate or you might be using IP-based location');
-            setError(`Location detected as Wellington or accuracy is poor (${accuracy.toFixed(0)}m). Try the manual location option below.`);
-            setShowLocationOverride(true);
-          } else {
+          if (bestPosition) {
+            const { latitude, longitude, accuracy } = bestPosition.coords;
+            console.log(`📍 Final location: ${latitude}, ${longitude} (accuracy: ${accuracy}m)`);
             setUserLocation({ latitude, longitude });
             
             if (map.current) {
@@ -163,13 +225,9 @@ const CurbsideMap = () => {
             setError('');
           }
           setGettingLocation(false);
-        } else {
-          // Still getting more accurate position
-          setError(`Improving accuracy... (current: ${accuracy.toFixed(0)}m)`);
-        }
+        }, 10000);
       },
       (error) => {
-        navigator.geolocation.clearWatch(watchId);
         let errorMessage = 'Could not get your location. ';
         switch(error.code) {
           case error.PERMISSION_DENIED:
@@ -192,20 +250,11 @@ const CurbsideMap = () => {
       },
       {
         enableHighAccuracy: true,
-        timeout: 30000,
-        maximumAge: 0  // Force fresh location, don't use cached
+        timeout: 8000,
+        maximumAge: 0
       }
     );
-    
-    // Fallback: Stop watching after 30 seconds and use best available
-    setTimeout(() => {
-      navigator.geolocation.clearWatch(watchId);
-      if (gettingLocation) {
-        setGettingLocation(false);
-        setError('Location acquired. If not accurate, try again or use manual location.');
-      }
-    }, 30000);
-  }, [gettingLocation]);
+  }, []);
 
   const setLocationToInvercargill = useCallback(() => {
     const sitCoords = { latitude: -46.4019, longitude: 168.3646 };
