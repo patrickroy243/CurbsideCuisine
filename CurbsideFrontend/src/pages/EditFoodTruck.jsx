@@ -77,6 +77,8 @@ const EditFoodTruck = () => {
   const [menuSaving, setMenuSaving] = useState(false);
   const [error, setError] = useState('');
   const [locationError, setLocationError] = useState('');
+  const [showManualLocationModal, setShowManualLocationModal] = useState(false);
+  const [manualCoords, setManualCoords] = useState({ latitude: '', longitude: '' });
 
   useEffect(() => {
     fetchFoodTruck();
@@ -222,6 +224,48 @@ const EditFoodTruck = () => {
     }
     
     return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+  };
+
+  const handleManualLocationSubmit = async () => {
+    const lat = parseFloat(manualCoords.latitude);
+    const lng = parseFloat(manualCoords.longitude);
+
+    if (isNaN(lat) || isNaN(lng)) {
+      setLocationError('Please enter valid coordinates');
+      return;
+    }
+
+    if (lat < -90 || lat > 90) {
+      setLocationError('Latitude must be between -90 and 90');
+      return;
+    }
+
+    if (lng < -180 || lng > 180) {
+      setLocationError('Longitude must be between -180 and 180');
+      return;
+    }
+
+    setLocationError('');
+    setGettingLocation(true);
+
+    try {
+      const locationName = await getReverseGeocode(lat, lng);
+      
+      setTruck(prev => ({
+        ...prev,
+        latitude: lat.toString(),
+        longitude: lng.toString(),
+        locationName: locationName
+      }));
+
+      setShowManualLocationModal(false);
+      setManualCoords({ latitude: '', longitude: '' });
+    } catch (error) {
+      console.error('Error getting location name:', error);
+      setLocationError('Failed to get location name');
+    } finally {
+      setGettingLocation(false);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -565,6 +609,15 @@ const EditFoodTruck = () => {
                     )}
                   </button>
 
+                  <button
+                    type="button"
+                    onClick={() => setShowManualLocationModal(true)}
+                    className="flex items-center justify-center px-4 py-2 bg-blue-100 text-blue-700 border border-blue-300 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                  >
+                    <MapPin className="w-4 h-4 mr-2" />
+                    Enter Coordinates Manually
+                  </button>
+
                   {locationError && (
                     <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-md text-sm">
                       {locationError}
@@ -814,6 +867,90 @@ const EditFoodTruck = () => {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Manual Location Modal */}
+      {showManualLocationModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 animate-fadeInUp">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-gray-900 flex items-center">
+                <MapPin className="w-6 h-6 mr-2 text-sky-600" />
+                Enter Coordinates
+              </h3>
+              <button
+                onClick={() => {
+                  setShowManualLocationModal(false);
+                  setManualCoords({ latitude: '', longitude: '' });
+                  setLocationError('');
+                }}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <span className="text-2xl">&times;</span>
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Latitude
+                </label>
+                <input
+                  type="number"
+                  step="any"
+                  placeholder="e.g., -46.4132"
+                  value={manualCoords.latitude}
+                  onChange={(e) => setManualCoords(prev => ({ ...prev, latitude: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+                />
+                <p className="text-xs text-gray-500 mt-1">Value between -90 and 90</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Longitude
+                </label>
+                <input
+                  type="number"
+                  step="any"
+                  placeholder="e.g., 168.3538"
+                  value={manualCoords.longitude}
+                  onChange={(e) => setManualCoords(prev => ({ ...prev, longitude: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+                />
+                <p className="text-xs text-gray-500 mt-1">Value between -180 and 180</p>
+              </div>
+
+              {locationError && (
+                <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-md text-sm">
+                  {locationError}
+                </div>
+              )}
+
+              <div className="flex gap-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowManualLocationModal(false);
+                    setManualCoords({ latitude: '', longitude: '' });
+                    setLocationError('');
+                  }}
+                  className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleManualLocationSubmit}
+                  disabled={gettingLocation}
+                  className="flex-1 px-4 py-2 text-sm font-medium text-white bg-sky-600 rounded-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 disabled:opacity-50"
+                >
+                  {gettingLocation ? 'Setting Location...' : 'Set Location'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
