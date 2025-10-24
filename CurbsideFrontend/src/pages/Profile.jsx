@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../Root';
 import { User, Mail, Phone, MapPin, Calendar, Settings, Camera, Save, Edit3, X, Eye, EyeOff, Lock, Bell, Shield, HelpCircle, CheckCircle, AlertCircle, XCircle, Award, Heart, Star, Sparkles, Zap, Activity } from 'lucide-react';
 import apiService from '../services/api';
@@ -54,6 +54,9 @@ const Profile = () => {
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [statsLoading, setStatsLoading] = useState(true);
+  const [profileImage, setProfileImage] = useState(user?.profileImageUrl || null);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = useRef(null);
   const [userStats, setUserStats] = useState({
     favoriteCount: 0,
     writtenReviewsCount: 0,
@@ -259,6 +262,48 @@ const Profile = () => {
     setEditing(false);
   };
 
+  const handleImageUpload = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      showNotification('Please select an image file', 'error');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      showNotification('Image size must be less than 5MB', 'error');
+      return;
+    }
+
+    setUploadingImage(true);
+    try {
+      // For now, create a local preview URL
+      // In the future, you can upload to your API/Supabase
+      const imageUrl = URL.createObjectURL(file);
+      setProfileImage(imageUrl);
+      showNotification('Profile image updated! (Note: This is a preview only)', 'success');
+      
+      // TODO: Implement actual upload to backend
+      // const formData = new FormData();
+      // formData.append('image', file);
+      // const response = await apiService.uploadProfileImage(formData);
+      // setProfileImage(response.imageUrl);
+      
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      showNotification('Failed to upload image: ' + error.message, 'error');
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const triggerImageUpload = () => {
+    fileInputRef.current?.click();
+  };
+
   
   const handlePasswordChange = (e) => {
     setPasswordData({
@@ -421,11 +466,34 @@ const Profile = () => {
           <div className="text-center">
             <div className="relative inline-block mb-8 animate-fadeInUp">
               <div className="relative">
-                <div className="w-40 h-40 bg-gradient-to-br from-white/90 to-white/70 rounded-full flex items-center justify-center text-6xl font-bold text-sky-600 shadow-2xl backdrop-blur-sm pulse-glow">
-                  {user?.name?.charAt(0).toUpperCase() || user?.userName?.charAt(0).toUpperCase() || 'U'}
-                </div>
-                <button className="absolute bottom-2 right-2 p-4 bg-gradient-to-br from-sky-500 to-blue-500 text-white rounded-full hover:from-sky-600 hover:to-blue-600 transition-all duration-200 shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
-                  <Camera className="w-6 h-6" />
+                {profileImage ? (
+                  <img 
+                    src={profileImage} 
+                    alt="Profile" 
+                    className="w-40 h-40 rounded-full object-cover shadow-2xl pulse-glow border-4 border-white/50"
+                  />
+                ) : (
+                  <div className="w-40 h-40 bg-gradient-to-br from-white/90 to-white/70 rounded-full flex items-center justify-center text-6xl font-bold text-sky-600 shadow-2xl backdrop-blur-sm pulse-glow">
+                    {user?.name?.charAt(0).toUpperCase() || user?.userName?.charAt(0).toUpperCase() || 'U'}
+                  </div>
+                )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+                <button 
+                  onClick={triggerImageUpload}
+                  disabled={uploadingImage}
+                  className="absolute bottom-2 right-2 p-4 bg-gradient-to-br from-sky-500 to-blue-500 text-white rounded-full hover:from-sky-600 hover:to-blue-600 transition-all duration-200 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {uploadingImage ? (
+                    <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <Camera className="w-6 h-6" />
+                  )}
                 </button>
               </div>
             </div>
