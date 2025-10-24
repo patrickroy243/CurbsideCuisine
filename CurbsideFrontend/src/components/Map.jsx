@@ -1098,6 +1098,20 @@ const CurbsideMap = () => {
                     {gettingLocation ? 'Finding...' : 'My Location'}
                   </button>
                   
+                  {userLocation && (
+                    <button
+                      onClick={() => {
+                        setUserLocation(null);
+                        setError('Location cleared. Click "My Location" to get it again.');
+                        setTimeout(() => setError(''), 3000);
+                      }}
+                      className="px-4 py-3 bg-red-500/80 hover:bg-red-600/80 text-white rounded-xl transition-all duration-300 backdrop-blur-sm border border-red-400/50 font-medium"
+                      title="Clear location"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                  
                   <button
                     onClick={() => setShowFilters(!showFilters)}
                     className={`px-4 py-3 border border-white/30 rounded-xl transition-all duration-300 backdrop-blur-sm font-medium ${
