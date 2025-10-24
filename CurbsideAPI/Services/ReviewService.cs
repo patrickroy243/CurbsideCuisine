@@ -43,13 +43,7 @@ namespace CurbsideAPI.Services
             if (!foodTruckExists)
                 throw new KeyNotFoundException("Food truck not found");
 
-            
-            var existingReview = await _context.Reviews
-                .FirstOrDefaultAsync(r => r.FoodTruckId == foodTruckId && r.UserId == userId);
-
-            if (existingReview != null)
-                throw new ArgumentException("You have already reviewed this food truck");
-
+            // Removed restriction - users can now add multiple reviews
             
             if (createDto.Rating < 1 || createDto.Rating > 5)
                 throw new ArgumentException("Rating must be between 1 and 5");
