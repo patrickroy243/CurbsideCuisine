@@ -157,10 +157,9 @@ namespace CurbsideAPI.Migrations
 
                     b.HasKey("ReviewId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("FoodTruckId");
 
-                    b.HasIndex("FoodTruckId", "UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
                 });

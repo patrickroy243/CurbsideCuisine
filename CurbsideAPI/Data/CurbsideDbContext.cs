@@ -63,7 +63,8 @@ namespace CurbsideAPI.Data
                     .HasForeignKey(r => r.FoodTruckId)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasIndex(r => new { r.FoodTruckId, r.UserId }).IsUnique();
+                // Removed unique constraint - users can now add multiple reviews
+                // entity.HasIndex(r => new { r.FoodTruckId, r.UserId }).IsUnique();
             });
 
             modelBuilder.Entity<User>()
