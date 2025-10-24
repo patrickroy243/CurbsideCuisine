@@ -106,10 +106,10 @@ const IntroAnimation = ({ onComplete }) => {
           </div>
           
           {/* Brand name */}
-          <div className={`absolute -bottom-20 left-1/2 -translate-x-1/2 whitespace-nowrap transition-opacity duration-500 ${
+          <div className={`absolute -bottom-20 left-1/2 -translate-x-1/2 whitespace-nowrap transition-opacity duration-500 px-4 ${
             stage >= 1 && stage < 2 ? 'opacity-100' : 'opacity-0'
           }`}>
-            <h1 className="text-5xl font-black text-white tracking-wider">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-wider">
               {typedText.slice(0, 8)}
               <span className="text-sky-400">{typedText.slice(8)}</span>
               <span className="animate-blink">|</span>
