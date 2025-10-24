@@ -32,7 +32,9 @@ const fetchWithAuth = async (url, options = {}) => {
 const apiService = {
   getImageUrl: (imageUrl) => {
     if (!imageUrl) return null;
+    // If it's already a full URL (Supabase or Azure), return as is
     if (imageUrl.startsWith('http')) return imageUrl;
+    // For legacy Azure filesystem paths, construct full URL
     const apiBaseWithoutPath = API_BASE_URL.replace('/api', '');
     return `${apiBaseWithoutPath}${imageUrl}`;
   },

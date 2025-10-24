@@ -9,10 +9,10 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 export const uploadFoodTruckImage = async (file) => {
   const fileExt = file.name.split('.').pop()
   const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
-  const filePath = `foodtrucks/${fileName}`
+  const filePath = `${fileName}`
 
   const { data, error } = await supabase.storage
-    .from('uploads')
+    .from('foodtruck-images')
     .upload(filePath, file)
 
   if (error) {
@@ -22,7 +22,7 @@ export const uploadFoodTruckImage = async (file) => {
 
   // Get public URL
   const { data: { publicUrl } } = supabase.storage
-    .from('uploads')
+    .from('foodtruck-images')
     .getPublicUrl(filePath)
 
   return publicUrl
@@ -34,13 +34,13 @@ export const deleteFoodTruckImage = async (imageUrl) => {
 
   try {
     // Extract file path from URL
-    const urlParts = imageUrl.split('/uploads/')
+    const urlParts = imageUrl.split('/foodtruck-images/')
     if (urlParts.length < 2) return
 
     const filePath = urlParts[1]
 
     const { error } = await supabase.storage
-      .from('uploads')
+      .from('foodtruck-images')
       .remove([filePath])
 
     if (error) {

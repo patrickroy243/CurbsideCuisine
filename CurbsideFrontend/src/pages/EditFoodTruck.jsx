@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../Root';
 import { Navigation, MapPin, ArrowLeft, Save, Plus, Edit, Trash2, DollarSign, Sparkles, Truck } from 'lucide-react';
 import apiService from '../services/api';
+import { uploadFoodTruckImage } from '../services/supabase';
 
 const pageStyles = `
   @keyframes fadeInUp {
@@ -333,8 +334,8 @@ const EditFoodTruck = () => {
       if (selectedFile) {
         setUploadingImage(true);
         try {
-          const uploadResponse = await apiService.uploadFoodTruckImage(selectedFile);
-          imageUrl = uploadResponse.data;
+          imageUrl = await uploadFoodTruckImage(selectedFile);
+          console.log('Image uploaded to Supabase:', imageUrl);
         } catch (uploadErr) {
           console.error('Error uploading image:', uploadErr);
           setError('Failed to upload image: ' + uploadErr.message);
