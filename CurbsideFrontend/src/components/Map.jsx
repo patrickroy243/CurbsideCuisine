@@ -42,6 +42,7 @@ const CurbsideMap = () => {
   const [gettingLocation, setGettingLocation] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [showLocationOverride, setShowLocationOverride] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   const [filters, setFilters] = useState({
     isOpen: false,
@@ -978,7 +979,20 @@ const CurbsideMap = () => {
         <div className="absolute bottom-40 left-1/4 w-40 h-40 bg-cyan-200/20 rounded-full blur-2xl animate-pulse" style={{animationDelay: '4s'}}></div>
       </div>
 
-      <div className={`${sidebarCollapsed ? 'w-16' : 'w-96'} bg-white/90 backdrop-blur-md border-r border-sky-200 flex flex-col transition-all duration-300 relative z-10 shadow-2xl`}>
+      {/* Mobile Toggle Button */}
+      <button
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        className="md:hidden fixed top-20 left-4 z-50 bg-gradient-to-br from-sky-600 to-blue-600 text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-transform duration-300"
+      >
+        {mobileMenuOpen ? <X className="w-6 h-6" /> : <Utensils className="w-6 h-6" />}
+      </button>
+
+      {/* Sidebar - hidden on mobile unless mobileMenuOpen is true */}
+      <div className={`
+        ${sidebarCollapsed ? 'w-16' : 'w-full md:w-96'} 
+        bg-white/90 backdrop-blur-md border-r border-sky-200 flex flex-col transition-all duration-300 relative shadow-2xl
+        ${mobileMenuOpen ? 'fixed inset-y-0 left-0 z-40' : 'hidden md:flex md:z-10'}
+      `}>
         <div className="bg-gradient-to-br from-sky-600 via-blue-600 to-cyan-600 relative overflow-hidden">
           <div className="absolute inset-0 opacity-10" style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
@@ -998,10 +1012,19 @@ const CurbsideMap = () => {
                     </div>
                   </div>
                   <button
-                    onClick={() => setSidebarCollapsed(true)}
-                    className="p-3 hover:bg-white/20 rounded-xl transition-all duration-300 backdrop-blur-sm"
+                    onClick={() => {
+                      setSidebarCollapsed(true);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="p-3 hover:bg-white/20 rounded-xl transition-all duration-300 backdrop-blur-sm hidden md:block"
                   >
                     <ChevronDown className="w-5 h-5 text-white transform rotate-90" />
+                  </button>
+                  <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="p-3 hover:bg-white/20 rounded-xl transition-all duration-300 backdrop-blur-sm md:hidden"
+                  >
+                    <X className="w-5 h-5 text-white" />
                   </button>
                 </div>
 
@@ -1337,6 +1360,14 @@ const CurbsideMap = () => {
           </>
         )}
       </div>
+
+      {/* Mobile backdrop overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="md:hidden fixed inset-0 bg-black/50 z-30"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
 
       <div className="flex-1 relative">
         {!mapLoaded && (
