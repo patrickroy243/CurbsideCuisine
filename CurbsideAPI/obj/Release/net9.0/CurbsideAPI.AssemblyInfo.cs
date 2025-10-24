@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CurbsideAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a7aa08f845658150188ac2513ef10939965b3ac3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8df752be9103ee6349a97306c3ab317e67fa6ee8")]
 [assembly: System.Reflection.AssemblyProductAttribute("CurbsideAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CurbsideAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

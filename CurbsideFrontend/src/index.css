@@ -82,3 +82,116 @@ body {
 .pulse-sky {
   animation: pulse-sky 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* Intro Animation Keyframes */
+@keyframes bounce-slow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce-dot {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-circle {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes ping-ring {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  75%, 100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 2s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+  opacity: 0;
+  animation-delay: 0.3s;
+}
+
+.animate-fade-in-up-delay {
+  animation: fade-in-up 0.8s ease-out forwards;
+  opacity: 0;
+  animation-delay: 0.6s;
+}
+
+.animate-bounce-dot-1 {
+  animation: bounce-dot 0.6s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.animate-bounce-dot-2 {
+  animation: bounce-dot 0.6s ease-in-out infinite;
+  animation-delay: 0.2s;
+}
+
+.animate-bounce-dot-3 {
+  animation: bounce-dot 0.6s ease-in-out infinite;
+  animation-delay: 0.4s;
+}
+
+.animate-pulse-circle {
+  animation: pulse-circle 1.5s ease-in-out infinite;
+}
+
+.animate-ping-ring-1 {
+  animation: ping-ring 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  animation-delay: 0s;
+}
+
+.animate-ping-ring-2 {
+  animation: ping-ring 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  animation-delay: 0.4s;
+}
+
+.animate-ping-ring-3 {
+  animation: ping-ring 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  animation-delay: 0.8s;
+}
+
+.animate-blink {
+  animation: blink 1s step-start infinite;
+}

@@ -20,6 +20,7 @@ import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
 import Map from './components/Map'; 
 import EditFoodTruck from './pages/EditFoodTruck';
+import IntroAnimation from './components/IntroAnimation';
 import { NotificationProvider } from './contexts/NotificationContext';
 import NotificationPanel from './components/NotificationPanel';
 
@@ -298,7 +299,14 @@ const router = createBrowserRouter([
 ]);
 
 const Root = () => {
-  return <RouterProvider router={router} />;
+  const [showIntro, setShowIntro] = useState(true);
+
+  return (
+    <>
+      {showIntro && <IntroAnimation onComplete={() => setShowIntro(false)} />}
+      <RouterProvider router={router} />
+    </>
+  );
 };
 
 export default Root;
